@@ -200,8 +200,15 @@ def test(app, args):
 
 def autotest(app, args):
     app.check()
+    optlist, args = getopt.getopt(args, '', ['tests='])
+    for o, a in optlist:
+        if o in ('--tests'):
+            tests = a
+
     print "~ Running in test mode"
     print "~ Ctrl+C to stop"
+    if tests:
+        print "~ testing %s" % tests
     print "~ "
 
     print "~ Deleting %s" % os.path.normpath(os.path.join(app.path, 'tmp'))
@@ -268,8 +275,8 @@ def autotest(app, args):
            fpcp.append(os.path.normpath(os.path.join(fpcp_libs, jar)))
     cp_args = ':'.join(fpcp)
     if os.name == 'nt':
-        cp_args = ';'.join(fpcp)    
-    java_cmd = [app.java_path(), '-classpath', cp_args, '-Dapplication.url=%s://localhost:%s' % (protocol, http_port), '-DheadlessBrowser=%s' % (headless_browser), 'play.modules.testrunner.FirePhoque']
+        cp_args = ';'.join(fpcp)
+    java_cmd = [app.java_path(), '-classpath', cp_args, '-Dapplication.url=%s://localhost:%s' % (protocol, http_port), '-DheadlessBrowser=%s' % (headless_browser), '-Dtests=%s' % tests , 'play.modules.testrunner.FirePhoque']
     if protocol == 'https':
         java_cmd.insert(-1, '-Djavax.net.ssl.trustStore=' + app.readConf('keystore.file'))
     try:

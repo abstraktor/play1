@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,10 +41,16 @@ public class FirePhoque {
             }
             root = new File(in.readLine());
             selenium = in.readLine();
-            tests = new ArrayList<String>();
             String line;
-            while ((line = in.readLine()) != null) {
-                tests.add(line);
+
+            String configuredTests = System.getProperty("tests");
+            if(configuredTests != null) {
+                tests = Arrays.asList(configuredTests.split(","));
+            } else {
+                tests = new ArrayList<String>();
+                while ((line = in.readLine()) != null) {
+                    tests.add(line);
+                }
             }
             in.close();
         } catch(Exception e) {
