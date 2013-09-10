@@ -44,9 +44,10 @@ public class FirePhoque {
             String line;
 
             String configuredTests = System.getProperty("tests");
-            if(configuredTests != null) {
+            if(configuredTests != null)
                 tests = Arrays.asList(configuredTests.split(","));
-            } else {
+            //run all if param was not provided or it's content was empty
+            if(tests == null || (tests.size() == 1 && tests.get(0).length() == 0)) {
                 tests = new ArrayList<String>();
                 while ((line = in.readLine()) != null) {
                     tests.add(line);
