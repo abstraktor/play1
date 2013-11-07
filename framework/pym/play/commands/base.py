@@ -76,7 +76,7 @@ def new(app, args, env, cmdloader=None):
                 if os.path.isdir(os.path.join(env["basedir"], 'modules/%s' % f)) and f.find('%s-' % m) == 0:
                     dirname = f
                     break
-        
+
         if not dirname:
             print "~ Oops. No module %s found" % m
             print "~ Try to install it using 'play install %s'" % m
@@ -98,7 +98,7 @@ def new(app, args, env, cmdloader=None):
     replaceAll(os.path.join(app.path, 'conf/application.conf'), r'%SECRET_KEY%', secretKey())
     print "~"
 
-    # Configure modules 
+    # Configure modules
     runDepsAfter = False
     for m in md:
         # Check dependencies.yml of the module
@@ -111,7 +111,7 @@ def new(app, args, env, cmdloader=None):
                 runDepsAfter = True
             except Exception:
                 pass
-                
+
     if runDepsAfter:
         cmdloader.commands['dependencies'].execute(command='dependencies', app=app, args=['--sync'], env=env, cmdloader=cmdloader)
 
@@ -142,11 +142,11 @@ def handle_sigint(signum, frame):
         else:
             print "\nKilling Java process"
             process.kill()
-        
+
 def run(app, args):
     global process
     app.check()
-    
+
     print "~ Ctrl+C to stop"
     print "~ "
     java_cmd = app.java_cmd(args)
@@ -201,6 +201,7 @@ def test(app, args):
 def autotest(app, args):
     app.check()
     optlist, args = getopt.getopt(args, '', ['tests='])
+    tests = ''
     for o, a in optlist:
         if o in ('--tests'):
             tests = a
@@ -287,7 +288,7 @@ def autotest(app, args):
 
     print "~"
     time.sleep(1)
-    
+
     # Kill if exists
     try:
         proxy_handler = urllib2.ProxyHandler({})
@@ -295,7 +296,7 @@ def autotest(app, args):
         opener.open('%s://localhost:%s/@kill' % (protocol, http_port))
     except Exception, e:
         pass
- 
+
     if os.path.exists(os.path.join(app.path, 'test-result/result.passed')):
         print "~ All tests passed"
         print "~"
