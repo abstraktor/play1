@@ -308,7 +308,7 @@ def autotest(app, args):
 
 def id(play_env):
     if not play_env["id"]:
-        print "~ framework ID is not set"
+        print "~ framework ID is not set (in %s)" % play_env["id_file"]
     new_id = raw_input("~ What is the new framework ID (or blank to unset)? ")
     if new_id:
         print "~"
