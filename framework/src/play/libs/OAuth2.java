@@ -89,6 +89,7 @@ public class OAuth2 {
         params.put("client_secret", secret);
         params.put("redirect_uri", callbackURL);
         params.put("code", accessCode);
+        params.put("grant_type", "authorization_code");
         HttpResponse response = WS.url(accessTokenURL).params(params).get();
         return new Response(response);
     }
