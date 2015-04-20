@@ -401,7 +401,7 @@ def _newname(template="Thread-%d"):
     _counter = _counter + 1
     return template % _counter
 
-# Active thread administration
+# Active thread admin
 _active_limbo_lock = _allocate_lock()
 _active = {}    # maps thread id to Thread object
 _limbo = {}
