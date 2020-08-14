@@ -312,7 +312,7 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
         }
     }
 
-    protected static void addToResponse(Response response, HttpResponse nettyResponse) {
+    protected static void addToResponse(Response response, HttpResponse nettyResponse, Request request) {
         Map<String, Http.Header> headers = response.headers;
         for (Map.Entry<String, Http.Header> entry : headers.entrySet()) {
             Http.Header hd = entry.getValue();
@@ -338,7 +338,13 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
             }
             c.setHttpOnly(cookie.httpOnly);
             encoder.addCookie(c);
-            nettyResponse.addHeader(SET_COOKIE, encoder.encode());
+
+          final String encodedCookie = encoder.encode();
+          if(encodedCookie.length() > 0 && request.secure) {
+            nettyResponse.addHeader(SET_COOKIE, encodedCookie + "; SECURE; SAMESITE=None");
+          } else {
+            nettyResponse.addHeader(SET_COOKIE, encodedCookie);
+          }
         }
 
         if (!response.headers.containsKey(CACHE_CONTROL) && !response.headers.containsKey(EXPIRES) && !(response.direct instanceof File)) {
@@ -401,7 +407,7 @@ public class PlayHandler extends SimpleChannelUpstreamHandler {
             nettyResponse.setHeader(CONTENT_TYPE, "text/plain; charset=" + response.encoding);
         }
 
-        addToResponse(response, nettyResponse);
+        addToResponse(response, nettyResponse, request);
 
         final Object obj = response.direct;
         File file = null;
